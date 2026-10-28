@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HMS — Medical Records</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="medical-records">
+  <aside id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <h1>Medical Records</h1>
+        <div class="header-actions">
+          <button class="btn btn-toggle" id="listViewBtn" type="button" aria-pressed="true">☰ All records</button>
+          <button class="btn btn-toggle" id="historyViewBtn" type="button" aria-pressed="false">🕒 Patient history</button>
+          <button class="btn btn-primary" id="addRecordBtn" type="button">+ Add Medical Record</button>
+        </div>
+      </div>
+
+      <p class="warning-box">Prototype: all clinical data is fictional sample text and is not medical advice.</p>
+
+      <!-- ===== LIST VIEW ===== -->
+      <section class="card" id="listView" aria-label="Medical record list">
+        <div class="toolbar">
+          <div class="grow">
+            <label for="searchBox">Search</label>
+            <input type="search" id="searchBox" placeholder="ID, patient, doctor, diagnosis, symptoms or prescription">
+          </div>
+          <div>
+            <label for="doctorFilter">Doctor</label>
+            <select id="doctorFilter"><option value="">All</option></select>
+          </div>
+          <div>
+            <label for="followFilter">Follow-up</label>
+            <select id="followFilter">
+              <option value="">Any</option>
+              <option value="overdue">Overdue</option>
+              <option value="soon">Due within 7 days</option>
+              <option value="none">No follow-up set</option>
+            </select>
+          </div>
+          <button class="btn" id="clearFilters" type="button">Clear</button>
+        </div>
+        <div class="result-count" id="resultCount" aria-live="polite"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Record</th><th>Patient</th><th>Doctor</th><th>Visit date</th><th>Diagnosis</th>
+                <th>Vital signs</th><th>Prescription</th><th>Follow-up</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="recordRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===== PATIENT HISTORY VIEW ===== -->
+      <section class="card hidden" id="historyView" aria-label="Patient history">
+        <div class="toolbar">
+          <div class="grow">
+            <label for="historyPatient">Patient</label>
+            <select id="historyPatient"></select>
+          </div>
+        </div>
+        <div id="historyBody" aria-live="polite"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== Add / Edit modal ===== -->
+  <div class="modal-backdrop hidden" id="recordModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="recordModalTitle">
+      <div class="modal-header">
+        <h2 id="recordModalTitle">Add Medical Record</h2>
+        <button class="btn btn-sm" type="button" data-close aria-label="Close form">✕</button>
+      </div>
+      <form id="recordForm" novalidate>
+        <div class="modal-body">
+          <p class="text-muted">Fields marked <span class="required"></span> are required. Use fictional sample text only.</p>
+          <div class="form-grid">
+
+            <div class="form-section">Visit</div>
+            <div class="form-group">
+              <label for="rId">Record ID</label>
+              <input id="rId" readonly>
+              <div class="form-hint">Generated automatically.</div>
+            </div>
+            <div class="form-group" id="g-rPatient">
+              <label class="required" for="rPatient">Patient</label>
+              <select id="rPatient" required></select>
+              <div class="field-error" id="e-rPatient"></div>
+            </div>
+            <div class="form-group" id="g-rDoctor">
+              <label class="required" for="rDoctor">Doctor</label>
+              <select id="rDoctor" required></select>
+              <div class="form-hint">Chosen automatically from the patient's assigned doctor, but you can change it.</div>
+              <div class="field-error" id="e-rDoctor"></div>
+            </div>
+            <div class="form-group" id="g-rVisit">
+              <label class="required" for="rVisit">Visit Date</label>
+              <input type="date" id="rVisit" required>
+              <div class="form-hint">Not in the future, and not before the patient's birth date.</div>
+              <div class="field-error" id="e-rVisit"></div>
+            </div>
+            <div class="form-group span-all" id="g-rComplaint">
+              <label class="required" for="rComplaint">Chief Complaint</label>
+              <input id="rComplaint" required minlength="3" maxlength="100">
+              <div class="form-hint">3 to 100 characters.</div>
+              <div class="field-error" id="e-rComplaint"></div>
+            </div>
+            <div class="form-group span-all" id="g-rSymptoms">
+              <label for="rSymptoms">Symptoms (optional)</label>
+              <textarea id="rSymptoms" rows="2" maxlength="200"></textarea>
+              <div class="form-hint">Maximum 200 characters.</div>
+              <div class="field-error" id="e-rSymptoms"></div>
+            </div>
+
+            <div class="form-section">Vital signs (all optional)</div>
+            <div class="form-group" id="g-rBp">
+              <label for="rBp">Blood Pressure (mmHg)</label>
+              <input id="rBp" maxlength="7" pattern="[0-9]{2,3}/[0-9]{2,3}" placeholder="120/80">
+              <div class="form-hint">Systolic/diastolic, e.g. 120/80.</div>
+              <div class="field-error" id="e-rBp"></div>
+            </div>
+            <div class="form-group" id="g-rHr">
+              <label for="rHr">Heart Rate (bpm)</label>
+              <input type="number" id="rHr" min="30" max="220" step="1">
+              <div class="form-hint">Whole number, 30 to 220.</div>
+              <div class="field-error" id="e-rHr"></div>
+            </div>
+            <div class="form-group" id="g-rTemp">
+              <label for="rTemp">Temperature (°C)</label>
+              <input type="number" id="rTemp" min="30" max="45" step="0.1">
+              <div class="form-hint">30.0 to 45.0.</div>
+              <div class="field-error" id="e-rTemp"></div>
+            </div>
+            <div class="form-group" id="g-rWeight">
+              <label for="rWeight">Weight (kg)</label>
+              <input type="number" id="rWeight" min="1" max="300" step="0.1">
+              <div class="form-hint">1 to 300.</div>
+              <div class="field-error" id="e-rWeight"></div>
+            </div>
+
+            <div class="form-section">Diagnosis and treatment</div>
+            <div class="form-group span-all" id="g-rDiagnosis">
+              <label class="required" for="rDiagnosis">Diagnosis</label>
+              <input id="rDiagnosis" required minlength="3" maxlength="100">
+              <div class="form-hint">3 to 100 characters.</div>
+              <div class="field-error" id="e-rDiagnosis"></div>
+            </div>
+            <div class="form-group span-all" id="g-rTreatment">
+              <label class="required" for="rTreatment">Treatment</label>
+              <textarea id="rTreatment" rows="2" required minlength="3" maxlength="300"></textarea>
+              <div class="form-hint">3 to 300 characters.</div>
+              <div class="field-error" id="e-rTreatment"></div>
+            </div>
+            <div class="form-group span-all" id="g-rPrescription">
+              <label for="rPrescription">Prescription (optional)</label>
+              <input id="rPrescription" maxlength="200" placeholder="e.g. Sample Tablet A 5mg">
+              <div class="field-error" id="e-rPrescription"></div>
+            </div>
+            <div class="form-group span-all" id="g-rLab">
+              <label for="rLab">Tests / Lab Notes (optional)</label>
+              <textarea id="rLab" rows="2" maxlength="300"></textarea>
+              <div class="form-hint">Maximum 300 characters.</div>
+              <div class="field-error" id="e-rLab"></div>
+            </div>
+            <div class="form-group" id="g-rFollow">
+              <label for="rFollow">Follow-up Date (optional)</label>
+              <input type="date" id="rFollow">
+              <div class="form-hint">On or after the visit date, within 12 months of it.</div>
+              <div class="field-error" id="e-rFollow"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" type="button" data-close>Cancel</button>
+          <button class="btn btn-primary" type="submit" id="saveRecordBtn">Save Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Record details modal ===== -->
+  <div class="modal-backdrop hidden" id="viewModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="viewTitle">
+      <div class="modal-header">
+        <h2 id="viewTitle">Medical Record</h2>
+        <button class="btn btn-sm" type="button" data-close aria-label="Close details">✕</button>
+      </div>
+      <div class="modal-body" id="viewBody"></div>
+      <div class="modal-footer" id="viewFooter"></div>
+    </div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/medical-records.js"></script>
+</body>
+</html>

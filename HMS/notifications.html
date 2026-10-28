@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HMS — Notifications</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="notifications">
+  <aside id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <h1>Notification Center</h1>
+        <div class="header-actions">
+          <button class="btn" id="markAllUnread" type="button">Mark all unread</button>
+          <button class="btn btn-primary" id="markAllRead" type="button">Mark all as read</button>
+        </div>
+      </div>
+
+      <section class="card" aria-label="Notifications">
+        <div class="toolbar">
+          <div>
+            <label for="readFilter">Show</label>
+            <select id="readFilter">
+              <option value="">All</option><option value="unread">Unread only</option><option value="read">Read only</option>
+            </select>
+          </div>
+          <div>
+            <label for="catFilter">Category</label>
+            <select id="catFilter">
+              <option value="">All</option><option>Pharmacy</option><option>Billing</option>
+              <option>Follow-up</option><option>Appointments</option>
+            </select>
+          </div>
+        </div>
+        <div class="result-count" id="resultCount" aria-live="polite"></div>
+        <ul class="notif-list" id="notifList"></ul>
+        <p class="section-note">Notifications are generated from the current dummy data. Read/unread state is saved in this browser only.</p>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/notifications.js"></script>
+</body>
+</html>

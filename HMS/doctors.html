@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HMS — Doctors</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="doctors">
+  <aside id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <h1>Doctor Management</h1>
+        <button class="btn btn-primary" id="addDoctorBtn" type="button">+ Add Doctor</button>
+      </div>
+
+      <section class="card" aria-label="Doctor list">
+        <div class="toolbar">
+          <div class="grow">
+            <label for="searchBox">Search</label>
+            <input type="search" id="searchBox" placeholder="ID, name, specialization or email">
+          </div>
+          <div>
+            <label for="deptFilter">Department</label>
+            <select id="deptFilter"><option value="">All</option></select>
+          </div>
+          <div>
+            <label for="availFilter">Availability</label>
+            <select id="availFilter">
+              <option value="">Any</option>
+              <option value="today">Available today</option>
+              <option value="Mon">Works Monday</option><option value="Tue">Works Tuesday</option>
+              <option value="Wed">Works Wednesday</option><option value="Thu">Works Thursday</option>
+              <option value="Fri">Works Friday</option><option value="Sat">Works Saturday</option>
+              <option value="Sun">Works Sunday</option>
+            </select>
+          </div>
+          <div>
+            <label for="statusFilter">Status</label>
+            <select id="statusFilter">
+              <option value="">All</option><option>Active</option><option>On Leave</option><option>Inactive</option>
+            </select>
+          </div>
+          <button class="btn" id="clearFilters" type="button">Clear</button>
+        </div>
+
+        <div class="result-count" id="resultCount" aria-live="polite"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>Name</th><th>Specialization</th><th>Department</th><th>Phone</th>
+                <th>Email</th><th>Experience</th><th>Availability</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="doctorRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== Add / Edit modal ===== -->
+  <div class="modal-backdrop hidden" id="doctorModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="doctorModalTitle">
+      <div class="modal-header">
+        <h2 id="doctorModalTitle">Add Doctor</h2>
+        <button class="btn btn-sm" type="button" data-close aria-label="Close form">✕</button>
+      </div>
+      <form id="doctorForm" novalidate>
+        <div class="modal-body">
+          <p class="text-muted">Fields marked <span class="required"></span> are required.</p>
+          <div class="form-grid">
+
+            <div class="form-section">Identity</div>
+            <div class="form-group" id="g-dId">
+              <label class="required" for="dId">Doctor ID</label>
+              <input id="dId" required maxlength="7" pattern="DOC-[0-9]{3}" placeholder="DOC-005">
+              <div class="form-hint">Format DOC-000. Must be unique.</div>
+              <div class="field-error" id="e-dId"></div>
+            </div>
+            <div class="form-group" id="g-dName">
+              <label class="required" for="dName">Full Name</label>
+              <input id="dName" required minlength="2" maxlength="40" placeholder="Dr. Ayesha Malik">
+              <div class="field-error" id="e-dName"></div>
+            </div>
+            <div class="form-group" id="g-dSpec">
+              <label class="required" for="dSpec">Specialization</label>
+              <input id="dSpec" required minlength="3" maxlength="50" placeholder="e.g. Cardiologist">
+              <div class="field-error" id="e-dSpec"></div>
+            </div>
+            <div class="form-group" id="g-dDept">
+              <label class="required" for="dDept">Department</label>
+              <select id="dDept" required></select>
+              <div class="field-error" id="e-dDept"></div>
+            </div>
+            <div class="form-group" id="g-dQual">
+              <label class="required" for="dQual">Qualification</label>
+              <input id="dQual" required minlength="2" maxlength="60" placeholder="e.g. MBBS, FCPS">
+              <div class="field-error" id="e-dQual"></div>
+            </div>
+            <div class="form-group" id="g-dExp">
+              <label class="required" for="dExp">Experience (years)</label>
+              <input type="number" id="dExp" required min="0" max="60" step="1">
+              <div class="form-hint">Whole number, 0 to 60.</div>
+              <div class="field-error" id="e-dExp"></div>
+            </div>
+
+            <div class="form-section">Contact</div>
+            <div class="form-group" id="g-dPhone">
+              <label class="required" for="dPhone">Phone</label>
+              <input type="tel" id="dPhone" required maxlength="12" pattern="03[0-9]{2}-[0-9]{7}" placeholder="0300-1234567">
+              <div class="field-error" id="e-dPhone"></div>
+            </div>
+            <div class="form-group" id="g-dEmail">
+              <label class="required" for="dEmail">Email</label>
+              <input type="email" id="dEmail" required maxlength="80" placeholder="name@hms.test">
+              <div class="form-hint">Must be unique among doctors.</div>
+              <div class="field-error" id="e-dEmail"></div>
+            </div>
+
+            <div class="form-section">Schedule and fee</div>
+            <div class="form-group span-all" id="g-dDays">
+              <fieldset id="dDays" tabindex="-1">
+                <legend class="required">Available Days</legend>
+                <div class="checkbox-row">
+                  <label><input type="checkbox" name="dDay" value="Mon"> Mon</label>
+                  <label><input type="checkbox" name="dDay" value="Tue"> Tue</label>
+                  <label><input type="checkbox" name="dDay" value="Wed"> Wed</label>
+                  <label><input type="checkbox" name="dDay" value="Thu"> Thu</label>
+                  <label><input type="checkbox" name="dDay" value="Fri"> Fri</label>
+                  <label><input type="checkbox" name="dDay" value="Sat"> Sat</label>
+                  <label><input type="checkbox" name="dDay" value="Sun"> Sun</label>
+                </div>
+              </fieldset>
+              <div class="field-error" id="e-dDays"></div>
+            </div>
+            <div class="form-group" id="g-dStart">
+              <label class="required" for="dStart">Available From</label>
+              <input type="time" id="dStart" required>
+              <div class="field-error" id="e-dStart"></div>
+            </div>
+            <div class="form-group" id="g-dEnd">
+              <label class="required" for="dEnd">Available Until</label>
+              <input type="time" id="dEnd" required>
+              <div class="field-error" id="e-dEnd"></div>
+            </div>
+            <div class="form-group" id="g-dFee">
+              <label class="required" for="dFee">Consultation Fee ($)</label>
+              <input type="number" id="dFee" required min="0" max="100000" step="0.01">
+              <div class="form-hint">0 to 100,000.</div>
+              <div class="field-error" id="e-dFee"></div>
+            </div>
+            <div class="form-group" id="g-dStatus">
+              <label class="required" for="dStatus">Status</label>
+              <select id="dStatus" required>
+                <option>Active</option><option>On Leave</option><option>Inactive</option>
+              </select>
+              <div class="field-error" id="e-dStatus"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" type="button" data-close>Cancel</button>
+          <button class="btn btn-primary" type="submit" id="saveDoctorBtn">Save Doctor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/doctors.js"></script>
+</body>
+</html>

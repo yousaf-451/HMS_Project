@@ -1,0 +1,51 @@
+HMS schema verification: 48 passed, 0 failed, 48 tests
+Tables: 16 -> appointments, audit_log, departments, dispensing, doctor_schedules, doctors, invoice_items, invoices, medical_records, medicine_categories, medicines, notification_reads, notifications, patients, prescriptions, users
+
+PASS  S1   Number of tables created
+PASS  S2   Sample data loads with no FK violations
+PASS  E1   Valid patient is accepted
+PASS  E2   Duplicate patient_code rejected (UNIQUE)
+PASS  E3   Bad patient_code format rejected
+PASS  E4   Duplicate doctor email rejected
+PASS  E5   Duplicate medicine batch_number rejected
+PASS  E6   Duplicate department name rejected
+PASS  D1   Invalid phone format rejected
+PASS  D2   Invalid gender rejected
+PASS  D3   Invalid blood group rejected
+PASS  D4   First name shorter than 2 characters rejected
+PASS  D5   Doctor experience above 60 rejected
+PASS  D6   Doctor fee above 100000 rejected
+PASS  D7   Schedule end time before start time rejected
+PASS  D8   Second schedule row for same doctor and day rejected
+PASS  D9   Medicine quantity below 0 rejected
+PASS  D10  Medicine price with value 0 rejected
+PASS  D11  Invoice tax rate above 30 rejected
+PASS  D12  Invoice item amount 0 rejected
+PASS  D13  Partially Paid with amount_paid 0 rejected
+PASS  D14  Blood pressure systolic <= diastolic rejected
+PASS  D15  Only one BP value given rejected
+PASS  D16  Temperature 50 rejected
+PASS  D17  Follow-up date before visit date rejected
+PASS  D18  Record with no vitals and no follow-up accepted
+PASS  D19  Patient with no email accepted (optional field)
+PASS  D20  Invalid appointment type rejected
+PASS  C1   Double booking (same doctor, date, time) rejected
+PASS  C2   Same time with a different doctor accepted
+PASS  C3   Cancelled appointment frees its slot
+PASS  F1   Appointment for a non-existent patient rejected
+PASS  F2   Deleting a doctor who has patients rejected (RESTRICT)
+PASS  F3   Deleting a patient who has appointments rejected (RESTRICT)
+PASS  F4   Deleting a department used by doctors rejected
+PASS  F5   Deleting an invoice removes its items (CASCADE)
+PASS  F6   Deleting an appointment keeps the medical record (SET NULL)
+PASS  F7   Dispensing a non-existent medicine rejected
+PASS  V1   INV-0001 total = (80 - 0) x 1.05
+PASS  V2   INV-0002 total = (135 - 10) x 1.05 (worked example)
+PASS  V3   Invoice totals for all 4 invoices
+PASS  V4   Stock status computed correctly
+PASS  V5   Dispensing amount = 3 x 0.30
+PASS  Q1   Doctor's working days from doctor_schedules (DOC-001)
+PASS  Q2   Department -> active doctors (Cardiology)
+PASS  Q3   Patient history: records of PAT-0004 newest first
+PASS  Q4   Pending / partly paid invoices (dashboard alert)
+PASS  Q5   Unread notifications for the admin user

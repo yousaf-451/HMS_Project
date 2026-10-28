@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HMS — Appointments</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="appointments">
+  <aside id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <h1>Appointments</h1>
+        <div class="header-actions">
+          <button class="btn btn-toggle" id="listViewBtn" type="button" aria-pressed="true">☰ List</button>
+          <button class="btn btn-toggle" id="weekViewBtn" type="button" aria-pressed="false">📅 Week calendar</button>
+          <button class="btn btn-primary" id="addApptBtn" type="button">+ Book Appointment</button>
+        </div>
+      </div>
+
+      <section class="card" aria-label="Appointments">
+        <div class="toolbar">
+          <div class="grow">
+            <label for="searchBox">Search</label>
+            <input type="search" id="searchBox" placeholder="ID, patient, doctor or reason">
+          </div>
+          <div>
+            <label for="statusFilter">Status</label>
+            <select id="statusFilter">
+              <option value="">All</option><option>Scheduled</option><option>Confirmed</option>
+              <option>Pending</option><option>Completed</option><option>Cancelled</option>
+            </select>
+          </div>
+          <div>
+            <label for="deptFilter">Department</label>
+            <select id="deptFilter"><option value="">All</option></select>
+          </div>
+          <div>
+            <label for="dateFilter">Date</label>
+            <input type="date" id="dateFilter">
+          </div>
+          <button class="btn" id="todayBtn" type="button">Today</button>
+          <button class="btn" id="clearFilters" type="button">Clear</button>
+        </div>
+
+        <!-- LIST VIEW -->
+        <div id="listView">
+          <div class="result-count" id="resultCount" aria-live="polite"></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th><th>Patient</th><th>Doctor</th><th>Department</th><th>Date</th>
+                  <th>Time</th><th>Type</th><th>Status</th><th>Reason</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="apptRows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- WEEK CALENDAR VIEW -->
+        <div id="weekView" class="hidden">
+          <div class="week-nav">
+            <button class="btn btn-sm" id="prevWeek" type="button">← Previous week</button>
+            <button class="btn btn-sm" id="thisWeek" type="button">This week</button>
+            <button class="btn btn-sm" id="nextWeek" type="button">Next week →</button>
+            <strong id="weekLabel" aria-live="polite"></strong>
+          </div>
+          <div class="table-wrap"><div class="week-grid" id="weekGrid"></div></div>
+          <p class="section-note">Click an appointment to see details. The date filter is ignored in this view.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== Booking / Edit modal ===== -->
+  <div class="modal-backdrop hidden" id="apptModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="apptModalTitle">
+      <div class="modal-header">
+        <h2 id="apptModalTitle">Book Appointment</h2>
+        <button class="btn btn-sm" type="button" data-close aria-label="Close form">✕</button>
+      </div>
+      <form id="apptForm" novalidate>
+        <div class="modal-body">
+          <p class="text-muted">Fields marked <span class="required"></span> are required.</p>
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label for="aId">Appointment ID</label>
+              <input id="aId" readonly>
+              <div class="form-hint">Generated automatically.</div>
+            </div>
+            <div class="form-group" id="g-aPatient">
+              <label class="required" for="aPatient">Patient</label>
+              <select id="aPatient" required></select>
+              <div class="field-error" id="e-aPatient"></div>
+            </div>
+
+            <div class="form-section">Doctor and schedule</div>
+            <div class="form-group" id="g-aDept">
+              <label class="required" for="aDept">Department</label>
+              <select id="aDept" required></select>
+              <div class="field-error" id="e-aDept"></div>
+            </div>
+            <div class="form-group" id="g-aDoctor">
+              <label class="required" for="aDoctor">Doctor</label>
+              <select id="aDoctor" required></select>
+              <div class="form-hint">Only active doctors of the chosen department.</div>
+              <div class="field-error" id="e-aDoctor"></div>
+            </div>
+            <div class="form-group" id="g-aDate">
+              <label class="required" for="aDate">Appointment Date</label>
+              <input type="date" id="aDate" required>
+              <div class="form-hint">Today or later, within 12 months.</div>
+              <div class="field-error" id="e-aDate"></div>
+            </div>
+            <div class="form-group" id="g-aTime">
+              <label class="required" for="aTime">Appointment Time</label>
+              <select id="aTime" required></select>
+              <div class="form-hint">30-minute slots from the doctor's working hours.</div>
+              <div class="field-error" id="e-aTime"></div>
+            </div>
+
+            <div class="span-all">
+              <div class="warning-box hidden" id="conflictBox" role="alert"></div>
+            </div>
+
+            <div class="form-section">Visit details</div>
+            <div class="form-group" id="g-aType">
+              <label class="required" for="aType">Appointment Type</label>
+              <select id="aType" required>
+                <option value="">Select...</option>
+                <option>Consultation</option><option>Follow-up</option>
+                <option>Emergency</option><option>Check-up</option>
+              </select>
+              <div class="field-error" id="e-aType"></div>
+            </div>
+            <div class="form-group span-all" id="g-aReason">
+              <label class="required" for="aReason">Reason / Notes</label>
+              <textarea id="aReason" rows="3" required minlength="5" maxlength="200"></textarea>
+              <div class="form-hint">5 to 200 characters. Use fictional sample text only.</div>
+              <div class="field-error" id="e-aReason"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" type="button" data-close>Cancel</button>
+          <button class="btn btn-primary" type="submit" id="saveApptBtn">Book Appointment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Appointment details modal ===== -->
+  <div class="modal-backdrop hidden" id="viewModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="viewTitle">
+      <div class="modal-header">
+        <h2 id="viewTitle">Appointment Details</h2>
+        <button class="btn btn-sm" type="button" data-close aria-label="Close details">✕</button>
+      </div>
+      <div class="modal-body" id="viewBody"></div>
+      <div class="modal-footer" id="viewFooter"></div>
+    </div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/appointments.js"></script>
+</body>
+</html>

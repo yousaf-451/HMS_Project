@@ -1,0 +1,1200 @@
+{
+ "project": "HMS - Hospital Management System",
+ "sprint": "Sprint 1",
+ "start": "19 Oct 2026",
+ "end": "01 Nov 2026",
+ "snapshot": "25 Oct 2026",
+ "review": "31 Oct 2026",
+ "retro": "01 Nov 2026",
+ "goal": "Deliver a working, testable HMS Increment: a staff member can log in and manage patients, doctors, appointments (no double-booking), medical records, billing and pharmacy stock, with every change stored in the SQLite database and covered by automatic tests.",
+ "link": "PASTE-YOUR-JIRA-OR-GITHUB-PROJECTS-LINK-HERE",
+ "objectives": [
+  "Replace paper / separate tools with one system for patients, doctors, appointments, records, bills and medicines.",
+  "Keep data correct with three validation layers: browser, Python server, database constraints.",
+  "Give staff dashboard, alerts, search and reports so they can see what needs attention.",
+  "Prove quality with automatic tests (86 API checks, 48 schema checks, 44 browser checks)."
+ ],
+ "modules": [
+  [
+   "Patient Management",
+   "Register, search, edit, view patients and their history"
+  ],
+  [
+   "Doctor Management",
+   "Doctor records, departments, weekly schedules, fees"
+  ],
+  [
+   "Appointments",
+   "Booking with slots, double-booking prevention, week calendar"
+  ],
+  [
+   "Medical Records",
+   "Visits, diagnosis, vitals, prescriptions, follow-ups"
+  ],
+  [
+   "Billing",
+   "Invoices with live totals, discount, tax, payment status"
+  ],
+  [
+   "Pharmacy",
+   "Medicine stock, expiry warnings, dispensing"
+  ],
+  [
+   "Supporting",
+   "Login, dashboard, reports, notifications, global search, audit log"
+  ]
+ ],
+ "dod": [
+  "Code works in Chrome/Edge against the real database (no localStorage data).",
+  "Browser validation, server rule and database constraint all behave as specified.",
+  "Acceptance criteria demonstrated to the Product Owner.",
+  "Automatic tests pass (tests/test_api.py, HMS_DB/verify_schema.py, selftest.html).",
+  "Another team member has reviewed the code (In Review column) before Done."
+ ],
+ "team": {
+  "AB": {
+   "name": "Muhammad Abdullah Malik",
+   "role": "Scrum Master + Developer (Team Lead)",
+   "resp": "Runs Sprint ceremonies, removes blockers, keeps the board current. Builds database, server.py, login, audit log and API tests.",
+   "focus": "Database & Backend",
+   "hours": 35,
+   "done": 7,
+   "done_hours": 30,
+   "tasks": 9
+  },
+  "UQ": {
+   "name": "Umair Qaisar",
+   "role": "Product Owner + Developer",
+   "resp": "Owns and prioritises the Product Backlog, writes acceptance criteria, accepts finished stories. Builds Patient module, login page and global search.",
+   "focus": "Patients & Search",
+   "hours": 33,
+   "done": 7,
+   "done_hours": 29,
+   "tasks": 9
+  },
+  "TA": {
+   "name": "Talha Azeem",
+   "role": "Developer",
+   "resp": "Builds Doctor Management and Appointments (booking, slots, calendar, double-booking warning).",
+   "focus": "Doctors & Appointments",
+   "hours": 33,
+   "done": 7,
+   "done_hours": 28,
+   "tasks": 9
+  },
+  "WA": {
+   "name": "Waleed Ali",
+   "role": "Developer",
+   "resp": "Builds Medical Records (vitals, prescriptions) and Billing (invoices, live totals, payments).",
+   "focus": "Records & Billing",
+   "hours": 32,
+   "done": 7,
+   "done_hours": 30,
+   "tasks": 8
+  },
+  "MY": {
+   "name": "Muhammad Yousaf",
+   "role": "Developer / QA",
+   "resp": "Builds Pharmacy, Dashboard, Notifications, Reports and the browser self-test / final regression run.",
+   "focus": "Pharmacy, Dashboard & QA",
+   "hours": 33,
+   "done": 8,
+   "done_hours": 31,
+   "tasks": 9
+  }
+ },
+ "backlog": [
+  {
+   "id": "PB-17",
+   "story": "As a developer, I need a verified relational database design so that all modules store data consistently.",
+   "rank": 1,
+   "moscow": "Must",
+   "pts": 8,
+   "inSprint": true
+  },
+  {
+   "id": "PB-01",
+   "story": "As a staff member, I want to log in securely so that only authorised people use HMS.",
+   "rank": 2,
+   "moscow": "Must",
+   "pts": 5,
+   "inSprint": true
+  },
+  {
+   "id": "PB-02",
+   "story": "As a receptionist, I want to register, edit, search and delete patients so that patient data is always current.",
+   "rank": 3,
+   "moscow": "Must",
+   "pts": 8,
+   "inSprint": true
+  },
+  {
+   "id": "PB-04",
+   "story": "As an administrator, I want to manage doctors and departments so that appointments can be assigned.",
+   "rank": 4,
+   "moscow": "Must",
+   "pts": 5,
+   "inSprint": true
+  },
+  {
+   "id": "PB-06",
+   "story": "As a receptionist, I want to book appointments with department, doctor, date and slot, and never double-book a doctor.",
+   "rank": 5,
+   "moscow": "Must",
+   "pts": 8,
+   "inSprint": true
+  },
+  {
+   "id": "PB-07",
+   "story": "As a doctor, I want to record visits with diagnosis and vitals so that medical history is complete.",
+   "rank": 6,
+   "moscow": "Must",
+   "pts": 8,
+   "inSprint": true
+  },
+  {
+   "id": "PB-09",
+   "story": "As a billing clerk, I want to create invoices with live totals, discount and tax so that patients are billed correctly.",
+   "rank": 7,
+   "moscow": "Must",
+   "pts": 8,
+   "inSprint": true
+  },
+  {
+   "id": "PB-10",
+   "story": "As a pharmacist, I want to manage medicine stock with expiry and low-stock warnings so that nothing runs out or expires.",
+   "rank": 8,
+   "moscow": "Must",
+   "pts": 5,
+   "inSprint": true
+  },
+  {
+   "id": "PB-11",
+   "story": "As a pharmacist, I want to dispense medicine and have stock reduce automatically so that stock is always accurate.",
+   "rank": 9,
+   "moscow": "Must",
+   "pts": 5,
+   "inSprint": true
+  },
+  {
+   "id": "PB-18",
+   "story": "As the team, we want automatic tests so that we can prove the Increment works.",
+   "rank": 10,
+   "moscow": "Must",
+   "pts": 5,
+   "inSprint": true
+  },
+  {
+   "id": "PB-03",
+   "story": "As a doctor, I want a patient profile with a timeline of appointments, records, bills and dispensing so that I see the full picture.",
+   "rank": 11,
+   "moscow": "Should",
+   "pts": 5,
+   "inSprint": true
+  },
+  {
+   "id": "PB-05",
+   "story": "As a receptionist, I want doctor schedules and an 'available today' filter so that I book the right doctor.",
+   "rank": 12,
+   "moscow": "Should",
+   "pts": 3,
+   "inSprint": true
+  },
+  {
+   "id": "PB-08",
+   "story": "As a doctor, I want to add prescriptions to a visit so that medicines are recorded with the record.",
+   "rank": 13,
+   "moscow": "Should",
+   "pts": 3,
+   "inSprint": true
+  },
+  {
+   "id": "PB-12",
+   "story": "As a manager, I want a dashboard with key numbers and alerts so that I see what needs attention.",
+   "rank": 14,
+   "moscow": "Should",
+   "pts": 5,
+   "inSprint": true
+  },
+  {
+   "id": "PB-15",
+   "story": "As a manager, I want reports across modules so that I can review hospital activity.",
+   "rank": 15,
+   "moscow": "Should",
+   "pts": 3,
+   "inSprint": true
+  },
+  {
+   "id": "PB-16",
+   "story": "As an auditor, I want every insert, update and delete logged so that changes can be traced.",
+   "rank": 16,
+   "moscow": "Should",
+   "pts": 3,
+   "inSprint": true
+  },
+  {
+   "id": "PB-13",
+   "story": "As a staff member, I want notifications with read/unread state so that I do not miss low stock or unpaid bills.",
+   "rank": 17,
+   "moscow": "Could",
+   "pts": 3,
+   "inSprint": true
+  },
+  {
+   "id": "PB-14",
+   "story": "As a staff member, I want one global search across modules so that I can find records quickly.",
+   "rank": 18,
+   "moscow": "Could",
+   "pts": 3,
+   "inSprint": true
+  },
+  {
+   "id": "PB-19",
+   "story": "As an administrator, I want role-based access (doctor, receptionist, pharmacist) so that users only see what they need.",
+   "rank": 19,
+   "moscow": "Should",
+   "pts": 8,
+   "inSprint": false
+  },
+  {
+   "id": "PB-20",
+   "story": "As a patient, I want SMS/email appointment reminders so that I do not miss visits.",
+   "rank": 20,
+   "moscow": "Could",
+   "pts": 5,
+   "inSprint": false
+  },
+  {
+   "id": "PB-21",
+   "story": "As a billing clerk, I want to print or export invoices as PDF so that I can give them to patients.",
+   "rank": 21,
+   "moscow": "Could",
+   "pts": 3,
+   "inSprint": false
+  },
+  {
+   "id": "PB-22",
+   "story": "As the hospital, we want to migrate to PostgreSQL and host online so that several branches can use HMS.",
+   "rank": 22,
+   "moscow": "Won't (this sprint)",
+   "pts": 8,
+   "inSprint": false
+  }
+ ],
+ "acceptance": {
+  "PB-17": [
+   "16 tables created from schema.sql with primary keys, foreign keys, CHECK and UNIQUE constraints.",
+   "ER diagram, sample data and verification report delivered; verify_schema.py reports 0 failed checks."
+  ],
+  "PB-01": [
+   "Empty form or wrong password is rejected with a clear message.",
+   "Correct login (admin@hms.test) opens the dashboard; password is stored only as a salted hash."
+  ],
+  "PB-02": [
+   "Required fields (first name, phone, date of birth) and formats are validated before saving.",
+   "A saved patient appears as a new row in the patients table.",
+   "Deleting a patient who has appointments is refused by the database (foreign key RESTRICT)."
+  ],
+  "PB-04": [
+   "A doctor can be added/edited with department, fee and working days.",
+   "Doctor list can be searched and filtered by department."
+  ],
+  "PB-06": [
+   "Doctor list depends on the chosen department; time slots are offered for the chosen date.",
+   "Selecting an already booked slot shows a warning in the form.",
+   "Even if the form is bypassed, the database refuses two active appointments for the same doctor, date and time."
+  ],
+  "PB-07": [
+   "Optional vitals are range-checked (e.g. temperature, pulse); systolic must be higher than diastolic.",
+   "Blood pressure is stored as two numbers; a patient's visit history lists all records."
+  ],
+  "PB-09": [
+   "Invoice supports several item rows; subtotal, discount, tax and total update live.",
+   "Items are stored as separate rows; total is computed by a view, never stored.",
+   "Payment status (unpaid / partial / paid) is saved and shown."
+  ],
+  "PB-10": [
+   "Medicine can be added with batch, expiry, quantity and price.",
+   "Expired and low-stock medicines are flagged in the list and in alerts."
+  ],
+  "PB-11": [
+   "Dispensing writes a history row and reduces medicines.quantity.",
+   "Dispensing more than the available stock is refused by the server."
+  ],
+  "PB-18": [
+   "python tests/test_api.py passes all 86 checks; HMS_DB/verify_schema.py passes all 48 checks.",
+   "selftest.html reports 0 failed; 44 browser checks recorded in e2e_browser_results.txt."
+  ],
+  "PB-03": [
+   "Profile shows appointments, records, prescriptions, invoices and dispensing for one patient.",
+   "Timeline can be filtered by type."
+  ],
+  "PB-05": [
+   "Working days come from doctor_schedules (one row per day).",
+   "'Available today' filter lists only doctors working today; doctor profile page opens."
+  ],
+  "PB-08": [
+   "Several prescription rows can be added to one medical record.",
+   "Prescriptions appear in the patient profile timeline."
+  ],
+  "PB-12": [
+   "Dashboard cards, alerts, today's schedule and a chart are read from the database.",
+   "Clicking a card opens the related module."
+  ],
+  "PB-15": [
+   "Reports page summarises patients, appointments, billing and pharmacy figures from the database."
+  ],
+  "PB-16": [
+   "Every insert, update and delete creates a row in audit_log with table, action and time."
+  ],
+  "PB-13": [
+   "Alerts are generated from stock, unpaid bills and follow-ups.",
+   "Marking an alert read is stored per user in notification_reads."
+  ],
+  "PB-14": [
+   "Searching a name or code returns matches from patients, doctors, appointments, records, invoices and medicines."
+  ]
+ },
+ "tasks": [
+  {
+   "id": "T-01",
+   "story": "PB-17",
+   "title": "Design 16-table schema with keys and CHECK constraints (schema.sql)",
+   "owner": "AB",
+   "hours": 6,
+   "prio": "High",
+   "deps": "",
+   "start": "19 Oct 2026",
+   "due": "20 Oct 2026",
+   "startIso": "2026-10-19",
+   "dueIso": "2026-10-20",
+   "done": "20 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-02",
+   "story": "PB-17",
+   "title": "Draw ER diagram and write sample_data.sql",
+   "owner": "AB",
+   "hours": 3,
+   "prio": "Medium",
+   "deps": "T-01",
+   "start": "20 Oct 2026",
+   "due": "21 Oct 2026",
+   "startIso": "2026-10-20",
+   "dueIso": "2026-10-21",
+   "done": "21 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-03",
+   "story": "PB-17",
+   "title": "Write verify_schema.py (48 schema checks) and database report",
+   "owner": "AB",
+   "hours": 4,
+   "prio": "Medium",
+   "deps": "T-01",
+   "start": "21 Oct 2026",
+   "due": "22 Oct 2026",
+   "startIso": "2026-10-21",
+   "dueIso": "2026-10-22",
+   "done": "22 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-04",
+   "story": "PB-01",
+   "title": "server.py: web server, JSON API skeleton, login with salted hash",
+   "owner": "AB",
+   "hours": 5,
+   "prio": "High",
+   "deps": "T-01",
+   "start": "20 Oct 2026",
+   "due": "21 Oct 2026",
+   "startIso": "2026-10-20",
+   "dueIso": "2026-10-21",
+   "done": "21 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-05",
+   "story": "PB-16",
+   "title": "Audit log: record every insert, update, delete",
+   "owner": "AB",
+   "hours": 3,
+   "prio": "Medium",
+   "deps": "T-04",
+   "start": "22 Oct 2026",
+   "due": "23 Oct 2026",
+   "startIso": "2026-10-22",
+   "dueIso": "2026-10-23",
+   "done": "23 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-06",
+   "story": "PB-06",
+   "title": "Server rule + unique index against double-booking",
+   "owner": "AB",
+   "hours": 4,
+   "prio": "High",
+   "deps": "T-01",
+   "start": "22 Oct 2026",
+   "due": "23 Oct 2026",
+   "startIso": "2026-10-22",
+   "dueIso": "2026-10-23",
+   "done": "23 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-07",
+   "story": "PB-18",
+   "title": "tests/test_api.py: 86 server + database rule checks",
+   "owner": "AB",
+   "hours": 5,
+   "prio": "High",
+   "deps": "T-04",
+   "start": "23 Oct 2026",
+   "due": "24 Oct 2026",
+   "startIso": "2026-10-23",
+   "dueIso": "2026-10-24",
+   "done": "24 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-08",
+   "story": "Process",
+   "title": "Sprint admin: planning, daily scrum notes, keep board current",
+   "owner": "AB",
+   "hours": 3,
+   "prio": "Medium",
+   "deps": "",
+   "start": "19 Oct 2026",
+   "due": "01 Nov 2026",
+   "startIso": "2026-10-19",
+   "dueIso": "2026-11-01",
+   "done": "",
+   "status": "In Progress"
+  },
+  {
+   "id": "T-09",
+   "story": "Process",
+   "title": "Import backlog and board into Jira/GitHub Projects, share workspace link",
+   "owner": "AB",
+   "hours": 2,
+   "prio": "High",
+   "deps": "T-08",
+   "start": "26 Oct 2026",
+   "due": "27 Oct 2026",
+   "startIso": "2026-10-26",
+   "dueIso": "2026-10-27",
+   "done": "",
+   "status": "To Do"
+  },
+  {
+   "id": "T-10",
+   "story": "PB-01",
+   "title": "Login page UI with validation messages (index.html)",
+   "owner": "UQ",
+   "hours": 4,
+   "prio": "High",
+   "deps": "T-04",
+   "start": "21 Oct 2026",
+   "due": "22 Oct 2026",
+   "startIso": "2026-10-21",
+   "dueIso": "2026-10-22",
+   "done": "22 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-11",
+   "story": "PB-02",
+   "title": "Patient form + browser validation (patients.html, validation.js)",
+   "owner": "UQ",
+   "hours": 5,
+   "prio": "High",
+   "deps": "T-04",
+   "start": "21 Oct 2026",
+   "due": "22 Oct 2026",
+   "startIso": "2026-10-21",
+   "dueIso": "2026-10-22",
+   "done": "22 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-12",
+   "story": "PB-02",
+   "title": "Patient list: search, filter, edit, delete with FK refusal",
+   "owner": "UQ",
+   "hours": 5,
+   "prio": "High",
+   "deps": "T-11",
+   "start": "22 Oct 2026",
+   "due": "23 Oct 2026",
+   "startIso": "2026-10-22",
+   "dueIso": "2026-10-23",
+   "done": "23 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-13",
+   "story": "PB-02",
+   "title": "Server patient endpoints and storage.js mapping",
+   "owner": "UQ",
+   "hours": 3,
+   "prio": "High",
+   "deps": "T-04",
+   "start": "21 Oct 2026",
+   "due": "22 Oct 2026",
+   "startIso": "2026-10-21",
+   "dueIso": "2026-10-22",
+   "done": "22 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-14",
+   "story": "PB-03",
+   "title": "Patient profile page with timeline filter (patient-profile.js)",
+   "owner": "UQ",
+   "hours": 5,
+   "prio": "Medium",
+   "deps": "T-12",
+   "start": "23 Oct 2026",
+   "due": "24 Oct 2026",
+   "startIso": "2026-10-23",
+   "dueIso": "2026-10-24",
+   "done": "24 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-15",
+   "story": "PB-14",
+   "title": "Global search page across modules (search.js)",
+   "owner": "UQ",
+   "hours": 4,
+   "prio": "Low",
+   "deps": "T-12",
+   "start": "24 Oct 2026",
+   "due": "25 Oct 2026",
+   "startIso": "2026-10-24",
+   "dueIso": "2026-10-25",
+   "done": "25 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-16",
+   "story": "Process",
+   "title": "Product Owner: prioritise backlog, write acceptance criteria",
+   "owner": "UQ",
+   "hours": 3,
+   "prio": "High",
+   "deps": "",
+   "start": "19 Oct 2026",
+   "due": "19 Oct 2026",
+   "startIso": "2026-10-19",
+   "dueIso": "2026-10-19",
+   "done": "19 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-17",
+   "story": "PB-02",
+   "title": "Quick View modal for a patient",
+   "owner": "UQ",
+   "hours": 2,
+   "prio": "Low",
+   "deps": "T-12",
+   "start": "24 Oct 2026",
+   "due": "26 Oct 2026",
+   "startIso": "2026-10-24",
+   "dueIso": "2026-10-26",
+   "done": "",
+   "status": "In Review"
+  },
+  {
+   "id": "T-18",
+   "story": "Process",
+   "title": "Product Owner acceptance of the Increment at Sprint Review",
+   "owner": "UQ",
+   "hours": 2,
+   "prio": "High",
+   "deps": "T-17",
+   "start": "30 Oct 2026",
+   "due": "31 Oct 2026",
+   "startIso": "2026-10-30",
+   "dueIso": "2026-10-31",
+   "done": "",
+   "status": "To Do"
+  },
+  {
+   "id": "T-20",
+   "story": "PB-04",
+   "title": "Doctor form and list with department filter (doctors.js)",
+   "owner": "TA",
+   "hours": 5,
+   "prio": "High",
+   "deps": "T-04",
+   "start": "21 Oct 2026",
+   "due": "22 Oct 2026",
+   "startIso": "2026-10-21",
+   "dueIso": "2026-10-22",
+   "done": "22 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-21",
+   "story": "PB-04",
+   "title": "Server doctor + department endpoints",
+   "owner": "TA",
+   "hours": 3,
+   "prio": "High",
+   "deps": "T-04",
+   "start": "21 Oct 2026",
+   "due": "22 Oct 2026",
+   "startIso": "2026-10-21",
+   "dueIso": "2026-10-22",
+   "done": "22 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-22",
+   "story": "PB-05",
+   "title": "Weekly schedule rows and 'Available today' filter",
+   "owner": "TA",
+   "hours": 4,
+   "prio": "Medium",
+   "deps": "T-20",
+   "start": "22 Oct 2026",
+   "due": "23 Oct 2026",
+   "startIso": "2026-10-22",
+   "dueIso": "2026-10-23",
+   "done": "23 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-23",
+   "story": "PB-05",
+   "title": "Doctor profile page (doctor-profile.js)",
+   "owner": "TA",
+   "hours": 3,
+   "prio": "Medium",
+   "deps": "T-22",
+   "start": "23 Oct 2026",
+   "due": "24 Oct 2026",
+   "startIso": "2026-10-23",
+   "dueIso": "2026-10-24",
+   "done": "24 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-24",
+   "story": "PB-06",
+   "title": "Booking form: department > doctor > date > time slots",
+   "owner": "TA",
+   "hours": 6,
+   "prio": "High",
+   "deps": "T-20",
+   "start": "22 Oct 2026",
+   "due": "24 Oct 2026",
+   "startIso": "2026-10-22",
+   "dueIso": "2026-10-24",
+   "done": "24 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-25",
+   "story": "PB-06",
+   "title": "'Already booked' slot warning in the form",
+   "owner": "TA",
+   "hours": 3,
+   "prio": "High",
+   "deps": "T-24,T-06",
+   "start": "24 Oct 2026",
+   "due": "24 Oct 2026",
+   "startIso": "2026-10-24",
+   "dueIso": "2026-10-24",
+   "done": "24 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-26",
+   "story": "PB-06",
+   "title": "Week calendar view of appointments",
+   "owner": "TA",
+   "hours": 4,
+   "prio": "Medium",
+   "deps": "T-24",
+   "start": "24 Oct 2026",
+   "due": "25 Oct 2026",
+   "startIso": "2026-10-24",
+   "dueIso": "2026-10-25",
+   "done": "25 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-27",
+   "story": "PB-06",
+   "title": "Cancel / complete appointment status changes",
+   "owner": "TA",
+   "hours": 2,
+   "prio": "Medium",
+   "deps": "T-24",
+   "start": "25 Oct 2026",
+   "due": "26 Oct 2026",
+   "startIso": "2026-10-25",
+   "dueIso": "2026-10-26",
+   "done": "",
+   "status": "In Review"
+  },
+  {
+   "id": "T-28",
+   "story": "PB-12",
+   "title": "Dashboard 'today's schedule' widget",
+   "owner": "TA",
+   "hours": 3,
+   "prio": "Low",
+   "deps": "T-24",
+   "start": "25 Oct 2026",
+   "due": "27 Oct 2026",
+   "startIso": "2026-10-25",
+   "dueIso": "2026-10-27",
+   "done": "",
+   "status": "In Progress"
+  },
+  {
+   "id": "T-30",
+   "story": "PB-07",
+   "title": "Medical record form with vitals, BP as two numbers",
+   "owner": "WA",
+   "hours": 6,
+   "prio": "High",
+   "deps": "T-12",
+   "start": "22 Oct 2026",
+   "due": "23 Oct 2026",
+   "startIso": "2026-10-22",
+   "dueIso": "2026-10-23",
+   "done": "23 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-31",
+   "story": "PB-07",
+   "title": "Vitals range validation and systolic > diastolic rule",
+   "owner": "WA",
+   "hours": 3,
+   "prio": "High",
+   "deps": "T-30",
+   "start": "23 Oct 2026",
+   "due": "23 Oct 2026",
+   "startIso": "2026-10-23",
+   "dueIso": "2026-10-23",
+   "done": "23 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-32",
+   "story": "PB-08",
+   "title": "Prescription rows inside a medical record",
+   "owner": "WA",
+   "hours": 4,
+   "prio": "Medium",
+   "deps": "T-30",
+   "start": "23 Oct 2026",
+   "due": "24 Oct 2026",
+   "startIso": "2026-10-23",
+   "dueIso": "2026-10-24",
+   "done": "24 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-33",
+   "story": "PB-07",
+   "title": "Patient history view and follow-up date",
+   "owner": "WA",
+   "hours": 3,
+   "prio": "Medium",
+   "deps": "T-30",
+   "start": "24 Oct 2026",
+   "due": "24 Oct 2026",
+   "startIso": "2026-10-24",
+   "dueIso": "2026-10-24",
+   "done": "24 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-34",
+   "story": "PB-09",
+   "title": "Invoice form with dynamic item rows and live totals",
+   "owner": "WA",
+   "hours": 7,
+   "prio": "High",
+   "deps": "T-12",
+   "start": "22 Oct 2026",
+   "due": "24 Oct 2026",
+   "startIso": "2026-10-22",
+   "dueIso": "2026-10-24",
+   "done": "24 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-35",
+   "story": "PB-09",
+   "title": "Discount and tax calculation; total view in database",
+   "owner": "WA",
+   "hours": 4,
+   "prio": "High",
+   "deps": "T-34",
+   "start": "24 Oct 2026",
+   "due": "25 Oct 2026",
+   "startIso": "2026-10-24",
+   "dueIso": "2026-10-25",
+   "done": "25 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-36",
+   "story": "PB-09",
+   "title": "Payment status handling (unpaid / partial / paid)",
+   "owner": "WA",
+   "hours": 3,
+   "prio": "Medium",
+   "deps": "T-34",
+   "start": "25 Oct 2026",
+   "due": "25 Oct 2026",
+   "startIso": "2026-10-25",
+   "dueIso": "2026-10-25",
+   "done": "25 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-37",
+   "story": "Process",
+   "title": "Peer code review of records and billing modules",
+   "owner": "WA",
+   "hours": 2,
+   "prio": "Medium",
+   "deps": "T-36",
+   "start": "25 Oct 2026",
+   "due": "27 Oct 2026",
+   "startIso": "2026-10-25",
+   "dueIso": "2026-10-27",
+   "done": "",
+   "status": "In Review"
+  },
+  {
+   "id": "T-40",
+   "story": "PB-10",
+   "title": "Medicine form and stock list (pharmacy.js)",
+   "owner": "MY",
+   "hours": 5,
+   "prio": "High",
+   "deps": "T-04",
+   "start": "21 Oct 2026",
+   "due": "22 Oct 2026",
+   "startIso": "2026-10-21",
+   "dueIso": "2026-10-22",
+   "done": "22 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-41",
+   "story": "PB-10",
+   "title": "Expiry and low-stock warnings",
+   "owner": "MY",
+   "hours": 3,
+   "prio": "High",
+   "deps": "T-40",
+   "start": "22 Oct 2026",
+   "due": "23 Oct 2026",
+   "startIso": "2026-10-22",
+   "dueIso": "2026-10-23",
+   "done": "23 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-42",
+   "story": "PB-11",
+   "title": "Dispensing form that reduces stock and writes history",
+   "owner": "MY",
+   "hours": 5,
+   "prio": "High",
+   "deps": "T-40",
+   "start": "23 Oct 2026",
+   "due": "24 Oct 2026",
+   "startIso": "2026-10-23",
+   "dueIso": "2026-10-24",
+   "done": "24 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-43",
+   "story": "PB-11",
+   "title": "Server refusal when quantity exceeds stock",
+   "owner": "MY",
+   "hours": 2,
+   "prio": "High",
+   "deps": "T-42",
+   "start": "24 Oct 2026",
+   "due": "24 Oct 2026",
+   "startIso": "2026-10-24",
+   "dueIso": "2026-10-24",
+   "done": "24 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-44",
+   "story": "PB-12",
+   "title": "Dashboard cards, alerts and chart (dashboard.js)",
+   "owner": "MY",
+   "hours": 5,
+   "prio": "Medium",
+   "deps": "T-12,T-40",
+   "start": "23 Oct 2026",
+   "due": "24 Oct 2026",
+   "startIso": "2026-10-23",
+   "dueIso": "2026-10-24",
+   "done": "24 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-45",
+   "story": "PB-13",
+   "title": "Notifications with per-user read state",
+   "owner": "MY",
+   "hours": 4,
+   "prio": "Low",
+   "deps": "T-44",
+   "start": "24 Oct 2026",
+   "due": "25 Oct 2026",
+   "startIso": "2026-10-24",
+   "dueIso": "2026-10-25",
+   "done": "25 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-46",
+   "story": "PB-15",
+   "title": "Reports page (reports.js)",
+   "owner": "MY",
+   "hours": 3,
+   "prio": "Medium",
+   "deps": "T-44",
+   "start": "24 Oct 2026",
+   "due": "25 Oct 2026",
+   "startIso": "2026-10-24",
+   "dueIso": "2026-10-25",
+   "done": "25 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-47",
+   "story": "PB-18",
+   "title": "In-browser selftest.html and 44 end-to-end checks",
+   "owner": "MY",
+   "hours": 4,
+   "prio": "High",
+   "deps": "T-45",
+   "start": "25 Oct 2026",
+   "due": "25 Oct 2026",
+   "startIso": "2026-10-25",
+   "dueIso": "2026-10-25",
+   "done": "25 Oct 2026",
+   "status": "Done"
+  },
+  {
+   "id": "T-48",
+   "story": "PB-18",
+   "title": "Final regression run on a clean machine; save results files",
+   "owner": "MY",
+   "hours": 2,
+   "prio": "High",
+   "deps": "T-47",
+   "start": "28 Oct 2026",
+   "due": "29 Oct 2026",
+   "startIso": "2026-10-28",
+   "dueIso": "2026-10-29",
+   "done": "",
+   "status": "In Progress"
+  }
+ ],
+ "risks": [
+  {
+   "risk": "Double-booking if two users book the same slot at the same moment",
+   "prob": "Medium",
+   "impact": "High",
+   "plan": "Unique index in the database as final guard; server checks first; test in test_api.py.",
+   "owner": "TA / AB"
+  },
+  {
+   "risk": "Data lost or inconsistent between browser, server and database",
+   "prob": "Medium",
+   "impact": "High",
+   "plan": "Single data layer (storage.js); foreign keys RESTRICT; Reset demo data button; audit_log.",
+   "owner": "AB"
+  },
+  {
+   "risk": "Modules depend on the database and server being ready first",
+   "prob": "High",
+   "impact": "Medium",
+   "plan": "Schema and server built first (T-01..T-04); others start after T-04; dependencies shown on the board.",
+   "owner": "AB"
+  },
+  {
+   "risk": "Team members fall behind or are unavailable",
+   "prob": "Medium",
+   "impact": "Medium",
+   "plan": "Daily scrum, tasks of 2-7 hours, pair review, Scrum Master reassigns blocked work.",
+   "owner": "AB"
+  },
+  {
+   "risk": "Scope creep (roles, SMS reminders, PDF export, PostgreSQL)",
+   "prob": "Medium",
+   "impact": "Medium",
+   "plan": "Kept in the Product Backlog (PB-19..PB-22); Product Owner decides; not in this Sprint.",
+   "owner": "UQ"
+  },
+  {
+   "risk": "Demo fails on another computer (Python version, port 8000 busy)",
+   "prob": "Low",
+   "impact": "High",
+   "plan": "Standard library only; start scripts for Win/Mac/Linux; port can be changed; rehearsal on a clean machine (T-48).",
+   "owner": "MY"
+  },
+  {
+   "risk": "Inconsistent validation between browser and server",
+   "prob": "Medium",
+   "impact": "Medium",
+   "plan": "Shared rules in validation.js; same rules re-checked in server.py and CHECK constraints; tests for each.",
+   "owner": "WA / UQ"
+  }
+ ],
+ "increment": [
+  "Login screen backed by the users table (salted password hash).",
+  "Patients: add, edit, view, search and delete; the database refuses deleting a patient with history.",
+  "Doctors: records, departments, weekly schedules, 'available today' filter.",
+  "Appointments: department > doctor > date > slot booking; double-booking blocked by form, server and database.",
+  "Medical records: vitals with range checks, prescriptions, patient history.",
+  "Billing: invoices with live totals, discount, tax and payment status.",
+  "Pharmacy: stock, expiry warnings, dispensing that reduces stock.",
+  "Dashboard, notifications, reports, global search and audit log.",
+  "Automatic tests: 86 API + 48 schema + 44 browser checks, all passing."
+ ],
+ "demo": [
+  [
+   "1-2",
+   "Project overview, Scrum team",
+   "Muhammad Abdullah Malik"
+  ],
+  [
+   "3-5",
+   "Product Backlog, Sprint Goal, Sprint Backlog",
+   "Umair Qaisar"
+  ],
+  [
+   "6",
+   "Task breakdown and allocation",
+   "Muhammad Abdullah Malik"
+  ],
+  [
+   "7",
+   "Estimation, scheduling, burndown",
+   "Talha Azeem"
+  ],
+  [
+   "8",
+   "Scrum Board (live in the tool)",
+   "Waleed Ali"
+  ],
+  [
+   "9",
+   "Expected Increment + live demo",
+   "Muhammad Yousaf"
+  ],
+  [
+   "10",
+   "Risks and challenges, Q&A",
+   "All members"
+  ]
+ ],
+ "burndown": [
+  {
+   "day": "19 Oct",
+   "ideal": 166.0,
+   "actual": 163
+  },
+  {
+   "day": "20 Oct",
+   "ideal": 153.2,
+   "actual": 157
+  },
+  {
+   "day": "21 Oct",
+   "ideal": 140.5,
+   "actual": 149
+  },
+  {
+   "day": "22 Oct",
+   "ideal": 127.7,
+   "actual": 120
+  },
+  {
+   "day": "23 Oct",
+   "ideal": 114.9,
+   "actual": 92
+  },
+  {
+   "day": "24 Oct",
+   "ideal": 102.2,
+   "actual": 44
+  },
+  {
+   "day": "25 Oct",
+   "ideal": 89.4,
+   "actual": 18
+  },
+  {
+   "day": "26 Oct",
+   "ideal": 76.6,
+   "actual": null
+  },
+  {
+   "day": "27 Oct",
+   "ideal": 63.8,
+   "actual": null
+  },
+  {
+   "day": "28 Oct",
+   "ideal": 51.1,
+   "actual": null
+  },
+  {
+   "day": "29 Oct",
+   "ideal": 38.3,
+   "actual": null
+  },
+  {
+   "day": "30 Oct",
+   "ideal": 25.5,
+   "actual": null
+  },
+  {
+   "day": "31 Oct",
+   "ideal": 12.8,
+   "actual": null
+  },
+  {
+   "day": "01 Nov",
+   "ideal": 0.0,
+   "actual": null
+  }
+ ],
+ "totals": {
+  "hours": 166,
+  "doneHours": 148,
+  "tasks": 44,
+  "doneTasks": 36,
+  "points": 93,
+  "stories": 18,
+  "days": 14
+ }
+}

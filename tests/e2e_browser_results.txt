@@ -1,0 +1,46 @@
+HMS browser end-to-end test (real Chromium + real server + SQLite): 44 passed, 0 failed, 44 checks
+
+PASS  1a wrong password shows an error on the login page
+PASS  1b correct login opens the dashboard
+PASS  1c dashboard shows 7 statistic cards
+PASS  1d dashboard counts come from the database (6 patients, 4 doctors)
+PASS  1e database was filled with the starting data on first load
+PASS  1f core tables are real: appointments=6, invoices=4, medicines=6, schedules=13
+PASS  1g sidebar says the app uses a SQLite database
+PASS  2 patients.html loads and shows 6+ database rows
+PASS  2 doctors.html loads and shows 4+ database rows
+PASS  2 appointments.html loads and shows 6+ database rows
+PASS  2 medical-records.html loads and shows 3+ database rows
+PASS  2 billing.html loads and shows 4+ database rows
+PASS  2 pharmacy.html loads and shows 6+ database rows
+PASS  2 reports.html loads and shows 4+ database rows
+PASS  2 notifications.html loads and shows 1+ database rows
+PASS  2 patient profile builds the combined timeline from the database
+PASS  2 doctor profile shows working days read from doctor_schedules
+PASS  2 global search finds Hamza across modules
+PASS  3a empty form shows validation errors and saves nothing
+PASS  3b valid patient saved: success message shown
+PASS  3c the patient is a real row in the patients table
+PASS  3d after reload the patient is still listed (data comes from the database)
+PASS  4a deleting a patient with appointments shows the database's refusal
+PASS  4b the patient is still in the patients table
+PASS  4c deleting a patient with no linked records works
+PASS  5a appointment booked and stored
+PASS  5b the booked slot is now labelled 'already booked' (conflict detection)
+PASS  5c conflict warning is shown
+PASS  6a total is calculated live: (50+30-10) x 1.05 = $73.50
+PASS  6b invoice saved with 2 item rows
+PASS  6c the database view computes the same total (73.50)
+PASS  6d 'Mark as paid' updates the status and amount_paid in the database
+PASS  7a amount is calculated: 5 x $0.50 = $2.50
+PASS  7b stock reduced in the medicines table (200 -> 195)
+PASS  7c a dispensing row was written
+PASS  7d deleting a medicine that was dispensed is refused by the database
+PASS  8a marking a notification read lowers the bell count
+PASS  8b the read state is a row in notification_reads
+PASS  8c notifications are stored in the notifications table
+PASS  8d after reload the bell count is unchanged (saved in the database)
+PASS  9 audit_log recorded the changes made in this session
+PASS  10a 'Reset demo data' empties and refills the database
+PASS  10b after logout a protected page sends you back to login
+PASS  11 no JavaScript errors in any page during the whole run

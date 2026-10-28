@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HMS — Pharmacy</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="pharmacy">
+  <aside id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <h1>Pharmacy Management</h1>
+        <div class="header-actions">
+          <button class="btn btn-toggle" id="stockViewBtn" type="button" aria-pressed="true">💊 Medicine stock</button>
+          <button class="btn btn-toggle" id="dispenseViewBtn" type="button" aria-pressed="false">🧾 Dispensing</button>
+          <button class="btn btn-primary" id="addMedBtn" type="button">+ Add Medicine</button>
+        </div>
+      </div>
+
+      <p class="warning-box">Prototype: sample medicines only. No real pharmacy system or supplier is connected.</p>
+      <div class="warning-box hidden" id="alertBanner" role="status"></div>
+
+      <!-- ===== STOCK VIEW ===== -->
+      <div id="stockView">
+        <section class="grid grid-stats" id="medStats" aria-label="Stock summary"></section>
+
+        <section class="card" aria-label="Medicine list">
+          <div class="toolbar">
+            <div class="grow">
+              <label for="searchBox">Search</label>
+              <input type="search" id="searchBox" placeholder="ID, name, category, manufacturer or batch">
+            </div>
+            <div>
+              <label for="categoryFilter">Category</label>
+              <select id="categoryFilter"><option value="">All</option></select>
+            </div>
+            <div>
+              <label for="statusFilter">Stock status</label>
+              <select id="statusFilter">
+                <option value="">All</option><option>In Stock</option><option>Low Stock</option>
+                <option>Out of Stock</option><option>Expired</option>
+              </select>
+            </div>
+            <button class="btn" id="clearFilters" type="button">Clear</button>
+          </div>
+          <div class="result-count" id="resultCount" aria-live="polite"></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th><th>Medicine</th><th>Category</th><th>Manufacturer</th><th>Quantity</th>
+                  <th>Unit</th><th>Price</th><th>Expiry date</th><th>Batch</th><th>Stock status</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="medRows"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- ===== DISPENSING VIEW ===== -->
+      <div id="dispenseView" class="hidden">
+        <div class="grid grid-2">
+          <section class="card" aria-label="Dispense medicine">
+            <h2>Dispense Medicine</h2>
+            <form id="dispenseForm" novalidate>
+              <div class="form-group" id="g-xPatient">
+                <label class="required" for="xPatient">Patient</label>
+                <select id="xPatient" required></select>
+                <div class="field-error" id="e-xPatient"></div>
+              </div>
+              <div class="form-group" id="g-xMedicine">
+                <label class="required" for="xMedicine">Medicine</label>
+                <select id="xMedicine" required></select>
+                <div class="form-hint">Expired and out-of-stock medicines are not offered.</div>
+                <div class="field-error" id="e-xMedicine"></div>
+              </div>
+              <div class="form-group" id="g-xQty">
+                <label class="required" for="xQty">Quantity</label>
+                <input type="number" id="xQty" required min="1" step="1">
+                <div class="form-hint">Whole number, from 1 up to the available stock.</div>
+                <div class="field-error" id="e-xQty"></div>
+              </div>
+
+              <div class="summary-box" aria-live="polite">
+                <h3>Calculation</h3>
+                <dl class="totals">
+                  <div><dt>Unit price</dt><dd id="cUnit">—</dd></div>
+                  <div><dt>× Quantity</dt><dd id="cQty">0</dd></div>
+                  <div class="grand"><dt>= Amount</dt><dd id="cAmount">$0.00</dd></div>
+                  <div><dt>Stock left after dispensing</dt><dd id="cLeft">—</dd></div>
+                </dl>
+              </div>
+              <button class="btn btn-primary" type="submit">Dispense medicine</button>
+            </form>
+            <div class="receipt hidden" id="dispReceipt" role="status"></div>
+          </section>
+
+          <section class="card" aria-label="Recent dispensing">
+            <h2>Recent Dispensing</h2>
+            <div class="table-wrap" id="dispLog"></div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ===== Add / Edit medicine modal ===== -->
+  <div class="modal-backdrop hidden" id="medModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="medModalTitle">
+      <div class="modal-header">
+        <h2 id="medModalTitle">Add Medicine</h2>
+        <button class="btn btn-sm" type="button" data-close aria-label="Close form">✕</button>
+      </div>
+      <form id="medForm" novalidate>
+        <div class="modal-body">
+          <p class="text-muted">Fields marked <span class="required"></span> are required. Use fictional sample names only.</p>
+          <div class="form-grid">
+
+            <div class="form-section">Medicine</div>
+            <div class="form-group" id="g-mId">
+              <label class="required" for="mId">Medicine ID</label>
+              <input id="mId" required maxlength="8" pattern="MED-[0-9]{4}" placeholder="MED-0007">
+              <div class="form-hint">Format MED-0000. Must be unique.</div>
+              <div class="field-error" id="e-mId"></div>
+            </div>
+            <div class="form-group" id="g-mName">
+              <label class="required" for="mName">Medicine Name</label>
+              <input id="mName" required minlength="2" maxlength="60">
+              <div class="form-hint">2 to 60 characters.</div>
+              <div class="field-error" id="e-mName"></div>
+            </div>
+            <div class="form-group" id="g-mCategory">
+              <label class="required" for="mCategory">Category</label>
+              <select id="mCategory" required></select>
+              <div class="field-error" id="e-mCategory"></div>
+            </div>
+            <div class="form-group" id="g-mManuf">
+              <label class="required" for="mManuf">Manufacturer</label>
+              <input id="mManuf" required minlength="2" maxlength="50">
+              <div class="field-error" id="e-mManuf"></div>
+            </div>
+
+            <div class="form-section">Stock and price</div>
+            <div class="form-group" id="g-mQty">
+              <label class="required" for="mQty">Quantity</label>
+              <input type="number" id="mQty" required min="0" max="100000" step="1">
+              <div class="form-hint">Whole number, 0 to 100,000.</div>
+              <div class="field-error" id="e-mQty"></div>
+            </div>
+            <div class="form-group" id="g-mUnit">
+              <label class="required" for="mUnit">Unit</label>
+              <select id="mUnit" required></select>
+              <div class="field-error" id="e-mUnit"></div>
+            </div>
+            <div class="form-group" id="g-mPrice">
+              <label class="required" for="mPrice">Price per unit ($)</label>
+              <input type="number" id="mPrice" required min="0.01" max="10000" step="0.01">
+              <div class="form-hint">0.01 to 10,000, at most 2 decimals.</div>
+              <div class="field-error" id="e-mPrice"></div>
+            </div>
+
+            <div class="form-section">Expiry and batch</div>
+            <div class="form-group" id="g-mExpiry">
+              <label class="required" for="mExpiry">Expiry Date</label>
+              <input type="date" id="mExpiry" required>
+              <div class="form-hint">Must be after today, within 10 years.</div>
+              <div class="field-error" id="e-mExpiry"></div>
+            </div>
+            <div class="form-group" id="g-mBatch">
+              <label class="required" for="mBatch">Batch Number</label>
+              <input id="mBatch" required minlength="3" maxlength="20" placeholder="AB-1001">
+              <div class="form-hint">3 to 20 letters, digits or hyphens. Must be unique.</div>
+              <div class="field-error" id="e-mBatch"></div>
+            </div>
+            <div class="span-all"><div class="warning-box hidden" id="expiryNote" role="status"></div></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" type="button" data-close>Cancel</button>
+          <button class="btn btn-primary" type="submit" id="saveMedBtn">Save Medicine</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Stock update modal ===== -->
+  <div class="modal-backdrop hidden" id="stockModal">
+    <div class="modal modal-sm" role="dialog" aria-modal="true" aria-labelledby="stockTitle">
+      <div class="modal-header">
+        <h2 id="stockTitle">Update Stock</h2>
+        <button class="btn btn-sm" type="button" data-close aria-label="Close form">✕</button>
+      </div>
+      <form id="stockForm" novalidate>
+        <div class="modal-body">
+          <div id="stockInfo" style="margin-bottom:16px"></div>
+          <div class="form-group" id="g-sType">
+            <label class="required" for="sType">Action</label>
+            <select id="sType" required>
+              <option value="add">Add stock (new delivery)</option>
+              <option value="remove">Remove stock (damaged / returned)</option>
+              <option value="set">Set exact quantity (stock count)</option>
+            </select>
+            <div class="field-error" id="e-sType"></div>
+          </div>
+          <div class="form-group" id="g-sAmount">
+            <label class="required" for="sAmount">Amount</label>
+            <input type="number" id="sAmount" required min="0" max="100000" step="1">
+            <div class="form-hint">Whole number. The result must stay between 0 and 100,000.</div>
+            <div class="field-error" id="e-sAmount"></div>
+          </div>
+          <p><strong id="stockPreview" aria-live="polite"></strong></p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" type="button" data-close>Cancel</button>
+          <button class="btn btn-primary" type="submit">Update stock</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Medicine details modal ===== -->
+  <div class="modal-backdrop hidden" id="viewModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="viewTitle">
+      <div class="modal-header">
+        <h2 id="viewTitle">Medicine Details</h2>
+        <button class="btn btn-sm" type="button" data-close aria-label="Close details">✕</button>
+      </div>
+      <div class="modal-body" id="viewBody"></div>
+      <div class="modal-footer" id="viewFooter"></div>
+    </div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/pharmacy.js"></script>
+</body>
+</html>

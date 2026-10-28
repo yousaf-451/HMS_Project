@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HMS — Login</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-page">
+  <main class="login-card">
+    <h1>🏥 HMS</h1>
+    <p class="text-muted" style="text-align:center">Hospital Management System (Prototype)</p>
+
+    <div class="login-hint">Demo login: <strong>admin@hms.test</strong> / <strong>Admin@123</strong></div>
+
+    <form id="loginForm" novalidate>
+      <div class="form-group" id="g-email">
+        <label class="required" for="email">Email</label>
+        <input type="email" id="email" required maxlength="80" autocomplete="username">
+        <div class="field-error" id="e-email"></div>
+      </div>
+      <div class="form-group" id="g-password">
+        <label class="required" for="password">Password</label>
+        <input type="password" id="password" required minlength="6" maxlength="30" autocomplete="current-password">
+        <div class="field-error" id="e-password"></div>
+      </div>
+      <button class="btn btn-primary" style="width:100%; justify-content:center" type="submit">Sign in</button>
+    </form>
+    <p class="text-muted" style="font-size:.8rem; margin-top:16px">
+      Passwords are checked by the server against the users table (stored as a salted hash).
+      <a href="about.html">About HMS</a></p>
+  </main>
+
+  <script>
+    const form = document.getElementById("loginForm");
+
+    // Show or clear an error under one field
+    function setError(field, message) {
+      document.getElementById("g-" + field).classList.toggle("has-error", !!message);
+      document.getElementById("e-" + field).textContent = message || "";
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      let valid = true;
+
+      // Email rule: required + valid format
+      if (!email) { setError("email", "Email is required."); valid = false; }
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError("email", "Enter a valid email address."); valid = false; }
+      else setError("email", "");
+
+      // Password rule: required + 6 to 30 characters
+      if (!password) { setError("password", "Password is required."); valid = false; }
+      else if (password.length < 6) { setError("password", "Password must be at least 6 characters."); valid = false; }
+      else setError("password", "");
+
+      if (!valid) return;
+
+      // Check the password on the server (it compares against the users table in the database)
+      fetch("api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      })
+        .then((res) => res.json().then((data) => ({ ok: res.ok, data })))
+        .then(({ ok, data }) => {
+          if (ok) {
+            sessionStorage.setItem("hms_user", JSON.stringify(data.user));
+            window.location.href = "dashboard.html";
+          } else {
+            setError("password", data.error || "Incorrect email or password.");
+          }
+        })
+        .catch(() => setError("password",
+          "Cannot reach the HMS server. Start it with: python server.py (then open http://localhost:8000)"));
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+HMS API + database integration tests: 86 passed, 0 failed, 86 tests
+
+PASS  A1 data API refuses a visitor who is not logged in (401)
+PASS  A2 wrong password is rejected (401)
+PASS  A3 unknown user is rejected (401)
+PASS  A4 correct login works (200) and returns the user
+PASS  A5 status shows logged in and not seeded
+PASS  A6 password is stored as a salted hash, not plain text
+PASS  A7 request without the cookie is refused (401)
+PASS  B1 starting data is accepted
+PASS  B2 database now marked as seeded
+PASS  B3 every collection reads back with the right number of rows
+PASS  B4 patient round-trips unchanged
+PASS  B5 doctor days and hours round-trip through doctor_schedules
+PASS  B6 doctor_schedules has one row per working day (3+2)
+PASS  B7 invoice items are separate rows (2+3)
+PASS  B8 blood pressure is stored as two numbers
+PASS  B9 prescription is linked to the stocked medicine
+PASS  B10 appointment department is derived from the doctor (not stored)
+PASS  B11 paid invoice without amountPaid gets the calculated total (84.00)
+PASS  B12 seeding again does nothing (existing data safe)
+PASS  B13 the database has relational CHECK data: 3 patient rows
+PASS  C1 add a patient (200)
+PASS  C2 the new patient is a real row in the patients table
+PASS  C3 edit a patient (200) and the change is stored
+PASS  C4 delete a patient with no linked records (200)
+PASS  C5 audit_log recorded the patient INSERT, UPDATE and DELETE
+PASS  C6 SQL-injection text is stored as plain data, tables survive
+PASS  C7 clean-up of the injection test row
+PASS  D1 bad phone format rejected by CHECK (409)
+PASS  D2 bad gender rejected by CHECK (409)
+PASS  D3 unknown doctor rejected (400)
+PASS  D4 duplicate id in one request rejected (400)
+PASS  D5 bad blood group rejected by CHECK (409)
+PASS  D6 duplicate doctor email rejected by UNIQUE (409)
+PASS  D7 experience 70 rejected by CHECK (409)
+PASS  D8 end time before start time rejected by CHECK (409)
+PASS  D9 deleting a doctor who has patients is blocked (409)
+PASS  D10 the blocked delete explains the foreign-key rule
+PASS  D11 the doctor is still in the database
+PASS  D12 double-booking the same doctor/date/time rejected (409)
+PASS  D13 a different doctor/time is accepted (200)
+PASS  D14 cancelling frees the slot for a new booking (200)
+PASS  D15 invalid appointment type rejected (409)
+PASS  D16 deleting a patient with appointments is blocked (409)
+PASS  D17 temperature 50 rejected by CHECK (409)
+PASS  D18 systolic not above diastolic rejected by CHECK (409)
+PASS  D19 malformed blood pressure rejected (400)
+PASS  D20 follow-up before the visit rejected by CHECK (409)
+PASS  D21 optional vitals may be blank (200)
+PASS  D22 16 invoice items rejected (400)
+PASS  D23 Partially Paid with 0 paid rejected by CHECK (409)
+PASS  D24 tax rate 50 rejected by CHECK (409)
+PASS  D25 item amount 0 rejected by CHECK (409)
+PASS  D26 duplicate batch number rejected by UNIQUE (409)
+PASS  D27 negative stock rejected by CHECK (409)
+PASS  D28 deleting a medicine that was dispensed is blocked (409)
+PASS  D29 a valid new medicine is accepted (200)
+PASS  D30 dispensing an unknown medicine rejected (400)
+PASS  D31 unknown collection rejected (404)
+PASS  R1 date of birth in the future rejected by the server (400)
+PASS  R2a appointment in the past rejected (400)
+PASS  R2b doctor does not work that weekday: rejected (400)
+PASS  R2c time outside the doctor's working hours rejected (400)
+PASS  R2d time not on the 30-minute grid rejected (400)
+PASS  R2e a valid slot (Monday 09:30) is accepted (200)
+PASS  R3a visit date in the future rejected (400)
+PASS  R3b visit before the patient's birth date rejected (400)
+PASS  R4 invoice date in the future rejected (400)
+PASS  R5a discount above the subtotal rejected (400)
+PASS  R5b partial payment not below the total rejected (400)
+PASS  R7 new medicine that is already expired rejected (400)
+PASS  R8a dispensing more than the stock rejected (400)
+PASS  R8b dispensing within the stock accepted (200)
+PASS  E1 alerts are stored in the notifications table
+PASS  E2 syncing twice does not create duplicates
+PASS  E3 marking read is saved per user
+PASS  E4 the read state is a row in notification_reads
+PASS  E5 marking unread removes the row
+PASS  F1 the web app is served (200)
+PASS  F2 server source is not downloadable
+PASS  F3 the database file is not downloadable
+PASS  F4 path traversal is blocked
+PASS  G1 logout works
+PASS  G2 after logout the data API is closed again (401)
+PASS  G3 reset empties the data tables
+PASS  G4 reset keeps the users table (login still works)
+PASS  G5 after reset the database is marked empty again

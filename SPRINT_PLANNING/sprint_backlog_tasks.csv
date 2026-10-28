@@ -1,0 +1,45 @@
+﻿Task ID,Summary,Parent Story,Assignee,Estimate (hours),Priority,Depends On,Start Date,Due Date,Completed Date,Status,Sprint
+T-01,Design 16-table schema with keys and CHECK constraints (schema.sql),PB-17,Muhammad Abdullah Malik,6,High,,2026-10-19,2026-10-20,2026-10-20,Done,Sprint 1
+T-02,Draw ER diagram and write sample_data.sql,PB-17,Muhammad Abdullah Malik,3,Medium,T-01,2026-10-20,2026-10-21,2026-10-21,Done,Sprint 1
+T-03,Write verify_schema.py (48 schema checks) and database report,PB-17,Muhammad Abdullah Malik,4,Medium,T-01,2026-10-21,2026-10-22,2026-10-22,Done,Sprint 1
+T-04,"server.py: web server, JSON API skeleton, login with salted hash",PB-01,Muhammad Abdullah Malik,5,High,T-01,2026-10-20,2026-10-21,2026-10-21,Done,Sprint 1
+T-05,"Audit log: record every insert, update, delete",PB-16,Muhammad Abdullah Malik,3,Medium,T-04,2026-10-22,2026-10-23,2026-10-23,Done,Sprint 1
+T-06,Server rule + unique index against double-booking,PB-06,Muhammad Abdullah Malik,4,High,T-01,2026-10-22,2026-10-23,2026-10-23,Done,Sprint 1
+T-07,tests/test_api.py: 86 server + database rule checks,PB-18,Muhammad Abdullah Malik,5,High,T-04,2026-10-23,2026-10-24,2026-10-24,Done,Sprint 1
+T-08,"Sprint admin: planning, daily scrum notes, keep board current",Process,Muhammad Abdullah Malik,3,Medium,,2026-10-19,2026-11-01,,In Progress,Sprint 1
+T-09,"Import backlog and board into Jira/GitHub Projects, share workspace link",Process,Muhammad Abdullah Malik,2,High,T-08,2026-10-26,2026-10-27,,To Do,Sprint 1
+T-10,Login page UI with validation messages (index.html),PB-01,Umair Qaisar,4,High,T-04,2026-10-21,2026-10-22,2026-10-22,Done,Sprint 1
+T-11,"Patient form + browser validation (patients.html, validation.js)",PB-02,Umair Qaisar,5,High,T-04,2026-10-21,2026-10-22,2026-10-22,Done,Sprint 1
+T-12,"Patient list: search, filter, edit, delete with FK refusal",PB-02,Umair Qaisar,5,High,T-11,2026-10-22,2026-10-23,2026-10-23,Done,Sprint 1
+T-13,Server patient endpoints and storage.js mapping,PB-02,Umair Qaisar,3,High,T-04,2026-10-21,2026-10-22,2026-10-22,Done,Sprint 1
+T-14,Patient profile page with timeline filter (patient-profile.js),PB-03,Umair Qaisar,5,Medium,T-12,2026-10-23,2026-10-24,2026-10-24,Done,Sprint 1
+T-15,Global search page across modules (search.js),PB-14,Umair Qaisar,4,Low,T-12,2026-10-24,2026-10-25,2026-10-25,Done,Sprint 1
+T-16,"Product Owner: prioritise backlog, write acceptance criteria",Process,Umair Qaisar,3,High,,2026-10-19,2026-10-19,2026-10-19,Done,Sprint 1
+T-17,Quick View modal for a patient,PB-02,Umair Qaisar,2,Low,T-12,2026-10-24,2026-10-26,,In Review,Sprint 1
+T-18,Product Owner acceptance of the Increment at Sprint Review,Process,Umair Qaisar,2,High,T-17,2026-10-30,2026-10-31,,To Do,Sprint 1
+T-20,Doctor form and list with department filter (doctors.js),PB-04,Talha Azeem,5,High,T-04,2026-10-21,2026-10-22,2026-10-22,Done,Sprint 1
+T-21,Server doctor + department endpoints,PB-04,Talha Azeem,3,High,T-04,2026-10-21,2026-10-22,2026-10-22,Done,Sprint 1
+T-22,Weekly schedule rows and 'Available today' filter,PB-05,Talha Azeem,4,Medium,T-20,2026-10-22,2026-10-23,2026-10-23,Done,Sprint 1
+T-23,Doctor profile page (doctor-profile.js),PB-05,Talha Azeem,3,Medium,T-22,2026-10-23,2026-10-24,2026-10-24,Done,Sprint 1
+T-24,Booking form: department > doctor > date > time slots,PB-06,Talha Azeem,6,High,T-20,2026-10-22,2026-10-24,2026-10-24,Done,Sprint 1
+T-25,'Already booked' slot warning in the form,PB-06,Talha Azeem,3,High,"T-24,T-06",2026-10-24,2026-10-24,2026-10-24,Done,Sprint 1
+T-26,Week calendar view of appointments,PB-06,Talha Azeem,4,Medium,T-24,2026-10-24,2026-10-25,2026-10-25,Done,Sprint 1
+T-27,Cancel / complete appointment status changes,PB-06,Talha Azeem,2,Medium,T-24,2026-10-25,2026-10-26,,In Review,Sprint 1
+T-28,Dashboard 'today's schedule' widget,PB-12,Talha Azeem,3,Low,T-24,2026-10-25,2026-10-27,,In Progress,Sprint 1
+T-30,"Medical record form with vitals, BP as two numbers",PB-07,Waleed Ali,6,High,T-12,2026-10-22,2026-10-23,2026-10-23,Done,Sprint 1
+T-31,Vitals range validation and systolic > diastolic rule,PB-07,Waleed Ali,3,High,T-30,2026-10-23,2026-10-23,2026-10-23,Done,Sprint 1
+T-32,Prescription rows inside a medical record,PB-08,Waleed Ali,4,Medium,T-30,2026-10-23,2026-10-24,2026-10-24,Done,Sprint 1
+T-33,Patient history view and follow-up date,PB-07,Waleed Ali,3,Medium,T-30,2026-10-24,2026-10-24,2026-10-24,Done,Sprint 1
+T-34,Invoice form with dynamic item rows and live totals,PB-09,Waleed Ali,7,High,T-12,2026-10-22,2026-10-24,2026-10-24,Done,Sprint 1
+T-35,Discount and tax calculation; total view in database,PB-09,Waleed Ali,4,High,T-34,2026-10-24,2026-10-25,2026-10-25,Done,Sprint 1
+T-36,Payment status handling (unpaid / partial / paid),PB-09,Waleed Ali,3,Medium,T-34,2026-10-25,2026-10-25,2026-10-25,Done,Sprint 1
+T-37,Peer code review of records and billing modules,Process,Waleed Ali,2,Medium,T-36,2026-10-25,2026-10-27,,In Review,Sprint 1
+T-40,Medicine form and stock list (pharmacy.js),PB-10,Muhammad Yousaf,5,High,T-04,2026-10-21,2026-10-22,2026-10-22,Done,Sprint 1
+T-41,Expiry and low-stock warnings,PB-10,Muhammad Yousaf,3,High,T-40,2026-10-22,2026-10-23,2026-10-23,Done,Sprint 1
+T-42,Dispensing form that reduces stock and writes history,PB-11,Muhammad Yousaf,5,High,T-40,2026-10-23,2026-10-24,2026-10-24,Done,Sprint 1
+T-43,Server refusal when quantity exceeds stock,PB-11,Muhammad Yousaf,2,High,T-42,2026-10-24,2026-10-24,2026-10-24,Done,Sprint 1
+T-44,"Dashboard cards, alerts and chart (dashboard.js)",PB-12,Muhammad Yousaf,5,Medium,"T-12,T-40",2026-10-23,2026-10-24,2026-10-24,Done,Sprint 1
+T-45,Notifications with per-user read state,PB-13,Muhammad Yousaf,4,Low,T-44,2026-10-24,2026-10-25,2026-10-25,Done,Sprint 1
+T-46,Reports page (reports.js),PB-15,Muhammad Yousaf,3,Medium,T-44,2026-10-24,2026-10-25,2026-10-25,Done,Sprint 1
+T-47,In-browser selftest.html and 44 end-to-end checks,PB-18,Muhammad Yousaf,4,High,T-45,2026-10-25,2026-10-25,2026-10-25,Done,Sprint 1
+T-48,Final regression run on a clean machine; save results files,PB-18,Muhammad Yousaf,2,High,T-47,2026-10-28,2026-10-29,,In Progress,Sprint 1

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HMS — Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="dashboard">
+  <aside id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <h1>Dashboard</h1>
+        <span class="text-muted" id="todayLabel"></span>
+      </div>
+
+      <section class="grid grid-stats" id="statCards" aria-label="Key statistics"></section>
+
+      <div class="grid grid-2">
+        <section class="card"><h2>⚠ Smart Alerts</h2><div id="alertList"></div>
+          <p class="section-note"><a href="notifications.html">Open the Notification Center</a></p></section>
+        <section class="card"><h2>📅 Today's Schedule</h2><div class="table-wrap" id="schedule"></div></section>
+      </div>
+
+      <div class="grid grid-2">
+        <section class="card"><h2>Appointments by Status</h2><div class="bars" id="chart"></div></section>
+        <section class="card"><h2>Recent Patients</h2><div class="table-wrap" id="recentPatients"></div></section>
+      </div>
+
+      <section class="card"><h2>Recent Activities</h2><ul id="activities"></ul></section>
+    </main>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

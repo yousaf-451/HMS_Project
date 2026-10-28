@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HMS — Billing</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="billing">
+  <aside id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <h1>Billing and Payments</h1>
+        <button class="btn btn-primary" id="addInvoiceBtn" type="button">+ Create Invoice</button>
+      </div>
+
+      <p class="warning-box">Prototype: no real payment is processed. "Mark as paid" only changes the status in this browser.</p>
+
+      <section class="grid grid-stats" id="billStats" aria-label="Billing summary"></section>
+
+      <section class="card" aria-label="Invoice list">
+        <div class="toolbar">
+          <div class="grow">
+            <label for="searchBox">Search</label>
+            <input type="search" id="searchBox" placeholder="Invoice ID, patient name or ID, or service">
+          </div>
+          <div>
+            <label for="statusFilter">Payment status</label>
+            <select id="statusFilter">
+              <option value="">All</option><option>Paid</option><option>Pending</option>
+              <option>Partially Paid</option><option>Cancelled</option>
+            </select>
+          </div>
+          <button class="btn" id="clearFilters" type="button">Clear</button>
+        </div>
+        <div class="result-count" id="resultCount" aria-live="polite"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Invoice</th><th>Patient</th><th>Date</th><th>Services</th>
+                <th>Consultation</th><th>Laboratory</th><th>Pharmacy</th><th>Other</th>
+                <th>Discount</th><th>Tax</th><th>Total</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="invoiceRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== Create / Edit invoice modal ===== -->
+  <div class="modal-backdrop hidden" id="invoiceModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="invoiceModalTitle">
+      <div class="modal-header">
+        <h2 id="invoiceModalTitle">Create Invoice</h2>
+        <button class="btn btn-sm" type="button" data-close aria-label="Close form">✕</button>
+      </div>
+      <form id="invoiceForm" novalidate>
+        <div class="modal-body">
+          <p class="text-muted">Fields marked <span class="required"></span> are required.</p>
+          <div class="form-grid">
+
+            <div class="form-section">Invoice</div>
+            <div class="form-group">
+              <label for="bId">Invoice ID</label>
+              <input id="bId" readonly>
+              <div class="form-hint">Generated automatically.</div>
+            </div>
+            <div class="form-group" id="g-bPatient">
+              <label class="required" for="bPatient">Patient</label>
+              <select id="bPatient" required></select>
+              <div class="field-error" id="e-bPatient"></div>
+            </div>
+            <div class="form-group" id="g-bDate">
+              <label class="required" for="bDate">Invoice Date</label>
+              <input type="date" id="bDate" required>
+              <div class="form-hint">Today or an earlier date.</div>
+              <div class="field-error" id="e-bDate"></div>
+            </div>
+
+            <div class="form-section">Services and charges</div>
+            <div class="span-all">
+              <div class="item-head" aria-hidden="true"><span>Category</span><span>Description</span><span>Amount ($)</span><span></span></div>
+              <div id="itemsBox"></div>
+              <button class="btn btn-sm" type="button" id="addItemBtn">+ Add service item</button>
+              <span class="form-hint" id="itemsHint"></span>
+              <div class="form-hint">Amount 0.01 to 100,000 with at most 2 decimals. Choosing a patient suggests the consultation fee of their doctor.</div>
+            </div>
+
+            <div class="form-section">Adjustments</div>
+            <div class="form-group" id="g-bDiscount">
+              <label for="bDiscount">Discount ($, optional)</label>
+              <input type="number" id="bDiscount" min="0" step="0.01" placeholder="0.00">
+              <div class="form-hint">0 up to the subtotal.</div>
+              <div class="field-error" id="e-bDiscount"></div>
+            </div>
+            <div class="form-group" id="g-bTax">
+              <label class="required" for="bTax">Tax Rate (%)</label>
+              <input type="number" id="bTax" required min="0" max="30" step="0.1" value="5">
+              <div class="form-hint">0 to 30. Tax is applied after the discount.</div>
+              <div class="field-error" id="e-bTax"></div>
+            </div>
+
+            <div class="span-all">
+              <div class="summary-box" aria-live="polite">
+                <h3>Calculation</h3>
+                <dl class="totals">
+                  <div><dt>Subtotal</dt><dd id="sumSub">$0.00</dd></div>
+                  <div><dt>− Discount</dt><dd id="sumDisc">$0.00</dd></div>
+                  <div><dt>= Amount after discount</dt><dd id="sumNet">$0.00</dd></div>
+                  <div><dt id="sumTaxLabel">+ Tax (0%)</dt><dd id="sumTax">$0.00</dd></div>
+                  <div class="grand"><dt>= Total</dt><dd id="sumTotal">$0.00</dd></div>
+                </dl>
+                <p class="form-hint" id="sumFormula"></p>
+              </div>
+            </div>
+
+            <div class="form-section">Payment</div>
+            <div class="form-group" id="g-bStatus">
+              <label class="required" for="bStatus">Payment Status</label>
+              <select id="bStatus" required>
+                <option>Pending</option><option>Partially Paid</option><option>Paid</option>
+              </select>
+              <div class="form-hint">Use "Cancel invoice" in the invoice view to cancel.</div>
+              <div class="field-error" id="e-bStatus"></div>
+            </div>
+            <div class="form-group hidden" id="g-bPaid">
+              <label class="required" for="bPaid">Amount Paid So Far ($)</label>
+              <input type="number" id="bPaid" min="0.01" step="0.01">
+              <div class="form-hint">More than 0 and less than the total.</div>
+              <div class="field-error" id="e-bPaid"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" type="button" data-close>Cancel</button>
+          <button class="btn btn-primary" type="submit" id="saveInvoiceBtn">Save Invoice</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== View invoice modal ===== -->
+  <div class="modal-backdrop hidden" id="viewModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="viewTitle">
+      <div class="modal-header">
+        <h2 id="viewTitle">Invoice</h2>
+        <button class="btn btn-sm" type="button" data-close aria-label="Close invoice">✕</button>
+      </div>
+      <div class="modal-body" id="viewBody"></div>
+      <div class="modal-footer" id="viewFooter"></div>
+    </div>
+  </div>
+
+  <!-- Invisible on screen. Filled and shown only when printing -->
+  <div class="print-area" id="printArea"></div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/billing.js"></script>
+</body>
+</html>

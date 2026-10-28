@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HMS — Patients</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="patients">
+  <aside id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar" id="topbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <h1>Patient Management</h1>
+        <button class="btn btn-primary" id="addPatientBtn" type="button">+ Add Patient</button>
+      </div>
+
+      <section class="card" aria-label="Patient list">
+        <div class="toolbar">
+          <div class="grow">
+            <label for="searchBox">Search</label>
+            <input type="search" id="searchBox" placeholder="ID, name, phone or email">
+          </div>
+          <div>
+            <label for="statusFilter">Status</label>
+            <select id="statusFilter">
+              <option value="">All</option><option>Active</option><option>Admitted</option><option>Discharged</option>
+            </select>
+          </div>
+          <div>
+            <label for="genderFilter">Gender</label>
+            <select id="genderFilter">
+              <option value="">All</option><option>Male</option><option>Female</option><option>Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="sortBy">Sort by</label>
+            <select id="sortBy">
+              <option value="name-asc">Name (A–Z)</option>
+              <option value="name-desc">Name (Z–A)</option>
+              <option value="id-desc">Newest ID first</option>
+              <option value="id-asc">Oldest ID first</option>
+              <option value="age-asc">Age (youngest)</option>
+              <option value="age-desc">Age (oldest)</option>
+            </select>
+          </div>
+          <button class="btn" id="clearFilters" type="button">Clear</button>
+        </div>
+
+        <div class="result-count" id="resultCount" aria-live="polite"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>Name</th><th>Gender</th><th>Age</th><th>Date of Birth</th>
+                <th>Phone</th><th>Email</th><th>Blood</th><th>Address</th>
+                <th>Emergency Contact</th><th>Doctor</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="patientRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== Add / Edit modal ===== -->
+  <div class="modal-backdrop hidden" id="patientModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="patientModalTitle">
+      <div class="modal-header">
+        <h2 id="patientModalTitle">Add Patient</h2>
+        <button class="btn btn-sm" type="button" data-close aria-label="Close form">✕</button>
+      </div>
+      <form id="patientForm" novalidate>
+        <div class="modal-body">
+          <p class="text-muted">Fields marked <span class="required"></span> are required.</p>
+          <div class="form-grid">
+
+            <div class="form-section">Identity</div>
+            <div class="form-group" id="g-pId">
+              <label class="required" for="pId">Patient ID</label>
+              <input id="pId" required maxlength="8" pattern="PAT-[0-9]{4}" placeholder="PAT-0007">
+              <div class="form-hint">Format PAT-0000. Must be unique.</div>
+              <div class="field-error" id="e-pId"></div>
+            </div>
+            <div class="form-group" id="g-pFirst">
+              <label class="required" for="pFirst">First Name</label>
+              <input id="pFirst" required minlength="2" maxlength="40">
+              <div class="field-error" id="e-pFirst"></div>
+            </div>
+            <div class="form-group" id="g-pLast">
+              <label class="required" for="pLast">Last Name</label>
+              <input id="pLast" required minlength="2" maxlength="40">
+              <div class="field-error" id="e-pLast"></div>
+            </div>
+            <div class="form-group" id="g-pDob">
+              <label class="required" for="pDob">Date of Birth</label>
+              <input type="date" id="pDob" required>
+              <div class="field-error" id="e-pDob"></div>
+            </div>
+            <div class="form-group" id="g-pGender">
+              <label class="required" for="pGender">Gender</label>
+              <select id="pGender" required>
+                <option value="">Select...</option><option>Male</option><option>Female</option><option>Other</option>
+              </select>
+              <div class="field-error" id="e-pGender"></div>
+            </div>
+            <div class="form-group" id="g-pBlood">
+              <label class="required" for="pBlood">Blood Group</label>
+              <select id="pBlood" required>
+                <option value="">Select...</option>
+                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+              </select>
+              <div class="field-error" id="e-pBlood"></div>
+            </div>
+
+            <div class="form-section">Contact</div>
+            <div class="form-group" id="g-pPhone">
+              <label class="required" for="pPhone">Phone</label>
+              <input type="tel" id="pPhone" required maxlength="12" pattern="03[0-9]{2}-[0-9]{7}" placeholder="0300-1234567">
+              <div class="field-error" id="e-pPhone"></div>
+            </div>
+            <div class="form-group" id="g-pEmail">
+              <label for="pEmail">Email (optional)</label>
+              <input type="email" id="pEmail" maxlength="80" placeholder="name@example.com">
+              <div class="field-error" id="e-pEmail"></div>
+            </div>
+            <div class="form-group span-all" id="g-pAddress">
+              <label class="required" for="pAddress">Address</label>
+              <input id="pAddress" required minlength="5" maxlength="120">
+              <div class="field-error" id="e-pAddress"></div>
+            </div>
+            <div class="form-group" id="g-pEmName">
+              <label class="required" for="pEmName">Emergency Contact Name</label>
+              <input id="pEmName" required minlength="2" maxlength="40">
+              <div class="field-error" id="e-pEmName"></div>
+            </div>
+            <div class="form-group" id="g-pEmPhone">
+              <label class="required" for="pEmPhone">Emergency Contact Phone</label>
+              <input type="tel" id="pEmPhone" required maxlength="12" pattern="03[0-9]{2}-[0-9]{7}" placeholder="0300-1234567">
+              <div class="field-error" id="e-pEmPhone"></div>
+            </div>
+
+            <div class="form-section">Care</div>
+            <div class="form-group" id="g-pDoctor">
+              <label class="required" for="pDoctor">Assigned Doctor</label>
+              <select id="pDoctor" required></select>
+              <div class="field-error" id="e-pDoctor"></div>
+            </div>
+            <div class="form-group" id="g-pStatus">
+              <label class="required" for="pStatus">Status</label>
+              <select id="pStatus" required>
+                <option>Active</option><option>Admitted</option><option>Discharged</option>
+              </select>
+              <div class="field-error" id="e-pStatus"></div>
+            </div>
+            <div class="form-group span-all" id="g-pNotes">
+              <label for="pNotes">Medical Notes (optional)</label>
+              <textarea id="pNotes" rows="3" maxlength="300"></textarea>
+              <div class="form-hint">Maximum 300 characters. Use fictional sample text only.</div>
+              <div class="field-error" id="e-pNotes"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" type="button" data-close>Cancel</button>
+          <button class="btn btn-primary" type="submit" id="savePatientBtn">Save Patient</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Quick View side panel ===== -->
+  <div class="modal-backdrop drawer-backdrop hidden" id="quickModal">
+    <aside class="modal drawer" role="dialog" aria-modal="true" aria-labelledby="quickTitle">
+      <div class="modal-header">
+        <h2 id="quickTitle">Patient Quick View</h2>
+        <button class="btn btn-sm" type="button" data-close aria-label="Close quick view">✕</button>
+      </div>
+      <div class="modal-body" id="quickBody"></div>
+    </aside>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/patients.js"></script>
+</body>
+</html>
